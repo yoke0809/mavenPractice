@@ -1,0 +1,60 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>testgroup</groupId>
+  <artifactId>test</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <description>てすとです</description>
+<!-- プロファイル設定 -->
+<profiles>
+    <profile>
+        <id>dev</id>
+        <activation>
+            <activeByDefault>true</activeByDefault>
+        </activation>
+        <properties>
+            <build.profile.id>dev</build.profile.id>
+        </properties>
+    </profile>
+    <profile>
+        <id>prod</id>
+        <properties>
+            <build.profile.id>prod</build.profile.id>
+        </properties>
+    </profile>
+    <profile>
+        <id>test</id>
+        <properties>
+            <build.profile.id>test</build.profile.id>
+        </properties>
+    </profile>
+</profiles>
+
+  <build>
+<!-- プロパティ値の取得元(dev/prod/testというディレクトリ)を用意しておく -->
+<filters>
+    <filter>src/main/resources/${build.profile.id}/config.properties</filter>
+</filters>
+<!-- プロパティ値の適用先ファイル -->
+   <resources>
+     <resource>
+        <directory>src/main/resources/${build.profile.id}</directory>
+        <filtering>true</filtering>
+     </resource>
+   </resources>
+  <plugins>
+   <plugin>
+   <groupId>org.apache.maven.plugins</groupId>
+   <artifactId>maven-jar-plugin</artifactId>
+    <configuration>
+     <archive>
+      <manifestEntries>
+       <!-- フォルダ指定の場合、パスの最後に / をつけるのを忘れないこと -->
+       <Class-Path>./src/main/resources/</Class-Path>
+      </manifestEntries>
+     </archive>
+   </configuration>
+  </plugin>
+  </plugins>
+  </build>
+
+</project>
